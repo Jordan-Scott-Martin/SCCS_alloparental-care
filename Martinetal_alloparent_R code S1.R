@@ -127,7 +127,7 @@ finaldata$bincare<-ifelse(finaldata$allomaternal<3,0,1)
 finaldata$binstore<-as.factor(ifelse(finaldata$storage==1,"none","present"))
 
 #phylo matrix
-phylo_vcv<-vcv.phylo(phylo, cor=FALSE)
+phylo_vcv<-vcv.phylo(phylo, cor=TRUE)
 
 ####################################################################
 ########################## Full models #############################
