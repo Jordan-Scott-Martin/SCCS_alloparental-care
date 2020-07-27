@@ -89,7 +89,7 @@ starve<-na.omit(starve)
 
 #phylo PCA
 phystarve<-phyl.pca(phylo_pca, starve, mode="cov", method="lambda")
-phystarve #loadings
+phystarve #loadings (sign changed by *-1 so that higher scores = higher starvation)
 
 #how many PCs to keep?
 pa<-fa.parallel(starve, fa="pc", n.iter=1000) #warnings can be safely ignored
@@ -102,7 +102,7 @@ starvescore<-data.frame(socname=allo_data$socname, PC3=NA)
 rownames(starvescore)<-allo_data$socname
 
 #add non-missing scores
-#score*(-1) so that higher scores = higher starvation risk
+#score*(-1) so that higher scores = higher starvation
 starvescore[rownames(starvescore) %in% rownames(phystarve$S),"PC3"]<-phystarve$S[,1]*(-1)
 }
 
@@ -462,7 +462,7 @@ d_df$d_mad<-apply(vars, 2, function(x) mad(x/logitsd))
 print(d_df) }
 
 #predict probability difference between high, average, and low PC1 & PC2
-#at average starvation risk, average covariates
+#at average starvation, average covariates
 #minimum monotonic category, marginalized over random effects
 {
 f <- function(x,y){
@@ -481,15 +481,15 @@ low  <- logistic(f(-1,-1)) #low
 lowt_highp  <- logistic(f(-1,1)) #low PC1, high PC2
 diff1<-low-avg #difference between these conditions
 diff2<-low-high #difference between these conditions
-diff3 <- low - (logistic(f(-1,1)))
+diff3 <- low - lowt_highp
 
-result <-  data.frame(stability=c("high", "average", "low", 
+result <-  data.frame(condition=c("high", "average", "low", "lowt_highp",
                                   "low - average", "low - high","low - lowt_highp" ),
-             prob_median=c(median(high), median(avg), median(low),
+             prob_median=c(median(high), median(avg), median(low),median(lowt_highp),
                            median(diff1), median(diff2), median(diff3)),
-             prob_mad=c(mad(high), mad(avg), mad(low),
+             prob_mad=c(mad(high), mad(avg), mad(low),mad(lowt_highp),
                         mad(diff1), mad(diff2), mad(diff3)),
-             diff_prob=c("-","-", "-",
+             diff_prob=c("-","-", "-","-",
                          sum(diff1>0)/length(diff1),sum(diff2>0)/length(diff2),
                          sum(diff3>0)/length(diff3)) )
 print(result)
@@ -1272,9 +1272,6 @@ hypothesis(allo.m3_ord_rs, "allomaternal_IPC2E2  < 0", class="b")
 hypothesis(allo.m3_ord_rs, "allomaternal_PC1:PC2  > 0", class="b")
 hypothesis(allo.m3_ord_rs, "allomaternal_miPC3  < 0", class="bsp")
 
-#get posterior samples
-post <- posterior_samples(allo.m3_ord_rs)
-
 ####################################################################
 #starvation effect without imputation
 #estimate model
@@ -1312,9 +1309,6 @@ fixef(allo.mcc, robust=TRUE, probs=c(0.05,0.95))["PC3",]
 #posterior probability for PC3 effect
 hypothesis(allo.mcc, "PC3  < 0", class="b")
 
-#get posterior samples
-post <- posterior_samples(allo.mcc)
- 
 ####################################################################
 ############ Supplementary father care analysis ####################
 ####################################################################
