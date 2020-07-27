@@ -1016,7 +1016,7 @@ plot(obj$tree, colors=obj$cols, add=TRUE, ftype="off", lwd=4, mar=c(2.5,1,1,1),
      xlim=get("last_plot.phylo",envir=.PlotPhyloEnv)$x.lim,
      ylim=get("last_plot.phylo",envir=.PlotPhyloEnv)$y.lim)
 
-add.color.bar(100, obj$cols,title="Posterior Probability of\n High Alloparental Care",
+add.color.bar(100, obj$cols,title="Posterior Probability of\n High Allomaternal Care",
               lims=obj$lims,digits=3,prompt=FALSE,x=0,
               y=135, lwd=4,fsize=1,subtitle="")
 axis(1, pos= -5)
@@ -1038,7 +1038,7 @@ png(file="Fig S1.png", res=600, width=8, height=10, units="in")
        xlim=get("last_plot.phylo",envir=.PlotPhyloEnv)$x.lim,
        ylim=get("last_plot.phylo",envir=.PlotPhyloEnv)$y.lim)
   
-  add.color.bar(100, obj$cols,title="Posterior Probability of\n High Alloparental Care",
+  add.color.bar(100, obj$cols,title="Posterior Probability of\n High Allomaternal Care",
                 lims=obj$lims,digits=3,prompt=FALSE,x=0,
                 y=135, lwd=4,fsize=1,subtitle="")
   axis(1, pos= -5)
